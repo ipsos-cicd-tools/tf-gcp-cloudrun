@@ -1,17 +1,3 @@
-# Terraform GCP Cloud Run Module
-
-Module to deploy:
-    * Cloud Run service
-
-## Compatibility
-
-* terraform version >= 1.6.6
-* hashicorp/google version ~> 5.20.0
-
-## Useage 
-More specific useage examples can be found in the ***modules*** folder under the corresponding module name
-
-```
 module "cloudrun" {
   source       = "git::https://github.com/ipsos-cicd-tools/tf-gcp-cloudrun//modules/cloudrun-service?ref=1.0.0"
   project_id   = var.project_id
@@ -50,4 +36,3 @@ module "cloudrun" {
     http_get_path         = "/healthcheck/"
   }
 }
-```
