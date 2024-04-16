@@ -13,7 +13,7 @@ More specific useage examples can be found in the ***modules*** folder under the
 
 ```
 module "cloudrun" {
-  source       = "git::https://github.com/ipsos-cicd-tools/tf-gcp-cloudrun//modules/cloudrun-service?ref=1.0.0"
+  source       = "git::https://github.com/ipsos-cicd-tools/tf-gcp-cloudrun//modules/cloudrun-service?ref=1.1.1"
   project_id   = var.project_id
   region       = var.region
   service_name = "test-service"
@@ -29,6 +29,11 @@ module "cloudrun" {
   max_instance_count   = 3
   allow_unauth         = true
   lifecycle_on         = true
+  resources = {
+    cpu    = "1"
+    memory = "256Mi"
+    startup_cpu_boost = false
+  }
   env_vars = [
     {
       name  = "TEST-ENVVAR"
