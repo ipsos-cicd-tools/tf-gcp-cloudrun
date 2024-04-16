@@ -4,6 +4,7 @@ module "cloudrun" {
   region       = var.region
   service_name = "test-service"
   timeout      = "120s"
+  ingress      = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
   labels = {
     deployedby = "terraform"
   }
@@ -12,6 +13,7 @@ module "cloudrun" {
   db_connection        = null
   vpc_connector        = null
   cloud_sql_connection = false
+  min_instance_count   = 0
   max_instance_count   = 3
   allow_unauth         = true
   lifecycle_on         = true
