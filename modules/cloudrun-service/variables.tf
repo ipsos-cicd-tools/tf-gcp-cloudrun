@@ -118,3 +118,15 @@ variable "lifecycle_on" {
   type        = bool
   default     = true
 }
+
+variable "resources" {
+  type = list(object({
+    cpu               = optional(string, null)
+    memory            = optional(string, null)
+    cpu_idle          = optional(bool, null)
+    startup_cpu_boost = optional(bool, null)
+  }))
+  description = "Resource limits"
+  default     = null
+}
+

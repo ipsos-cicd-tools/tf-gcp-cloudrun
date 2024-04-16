@@ -14,6 +14,18 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
     containers {
       image = var.image_path
 
+      dynamic "resources" {
+        for_each = var.resources != null ? [var.resources] : []
+        content {
+          startup_cpu_boost = resources.value.startup_cpu_boost != null ? resources.value.startup_cpu_boost : null
+          cpu_idle          = resources.value.cpu_idle != null ? resources.value.cpu_idle : true
+          limits = {
+            cpu    = resources.value.cpu != null ? resources.value.cpu : null
+            memory = resources.value.memory != null ? resources.value.memory : null
+          }
+        }
+      }
+
       dynamic "volume_mounts" {
         for_each = var.cloud_sql_connection ? [1] : []
         content {
