@@ -60,7 +60,7 @@ vpc_egress  = "PRIVATE_RANGES_ONLY"
 | <a name="input_min_instance_count"></a> [min\_instance\_count](#input\_min\_instance\_count) | n/a | `number` | `0` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | n/a | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | n/a | `string` | n/a | yes |
-| <a name="input_resources"></a> [resources](#input\_resources) | Resource limits | <pre>list(object({<br>    cpu               = optional(string, null)<br>    memory            = optional(string, null)<br>    cpu_idle          = optional(bool, null)<br>    startup_cpu_boost = optional(bool, null)<br>  }))</pre> | `null` | no |
+| <a name="input_resources"></a> [resources](#input\_resources) | Resource limits | <pre>object({<br>    cpu               = optional(string, null)<br>    memory            = optional(string, null)<br>    cpu_idle          = optional(bool, null)<br>    startup_cpu_boost = optional(bool, null)<br>  })</pre> | `null` | no |
 | <a name="input_service_account"></a> [service\_account](#input\_service\_account) | n/a | `string` | `null` | no |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | n/a | `string` | n/a | yes |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | n/a | `string` | `"60s"` | no |
