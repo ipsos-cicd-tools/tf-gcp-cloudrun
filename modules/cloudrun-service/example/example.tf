@@ -18,8 +18,8 @@ module "cloudrun" {
   allow_unauth         = true
   lifecycle_on         = true
   resources = {
-    cpu    = "1"
-    memory = "256Mi"
+    cpu               = "1"
+    memory            = "256Mi"
     startup_cpu_boost = false
   }
   env_vars = [

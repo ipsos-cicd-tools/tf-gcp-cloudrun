@@ -129,4 +129,3 @@ variable "resources" {
   description = "Resource limits"
   default     = null
 }
-
