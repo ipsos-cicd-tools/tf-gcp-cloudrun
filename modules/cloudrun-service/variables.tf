@@ -129,3 +129,12 @@ variable "resources" {
   description = "Resource limits"
   default     = null
 }
+
+variable "volume_mounts" {
+  type = object({
+    name       = string
+    mount_path = string
+  })
+  description = "Volume mounts"
+  default     = null
+}
