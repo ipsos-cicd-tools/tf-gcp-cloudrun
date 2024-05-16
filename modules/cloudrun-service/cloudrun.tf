@@ -14,6 +14,10 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
     containers {
       image = var.image_path
 
+      ports {
+        container_port = var.container_port
+      }
+
       dynamic "resources" {
         for_each = var.resources != null ? [var.resources] : []
         content {
@@ -66,6 +70,19 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
 
           http_get {
             path = liveness_probe.value.http_get_path
+          }
+        }
+      }
+
+      dynamic "startup_probe" {
+        for_each = var.startup_probe != null ? [var.startup_probe] : []
+        content {
+          failure_threshold     = startup_probe.value.failure_threshold
+          initial_delay_seconds = startup_probe.value.initial_delay_seconds
+          period_seconds        = startup_probe.value.period_seconds
+          timeout_seconds       = startup_probe.value.timeout_seconds
+          tcp_socket {
+            port = startup_probe.value.port
           }
         }
       }

@@ -129,3 +129,22 @@ variable "resources" {
   description = "Resource limits"
   default     = null
 }
+
+variable "startup_probe" {
+  type = object({
+    failure_threshold     = optional(number, null)
+    initial_delay_seconds = optional(number, null)
+    period_seconds        = optional(number, null)
+    timeout_seconds       = optional(number, null)
+    http_get_path         = optional(string, null)
+    port                  = optional(number, null)
+  })
+  description = "values for startup probe"
+  default     = null
+}
+
+variable "container_port" {
+  type        = number
+  default     = 8080
+  description = "Port container uses to listen for incoming requests"
+}
