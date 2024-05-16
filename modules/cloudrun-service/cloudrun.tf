@@ -89,6 +89,29 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
       }
     }
 
+    dynamic "volumes" {
+      for_each = var.gcs_volumes != null ? [1] : []
+      content {
+        name = each.value.name
+        gcs {
+          bucket    = each.value.bucket
+          read_only = each.value.read_only
+        }
+      }
+    }
+
+    dynamic "volumes" {
+      for_each = var.nfs_volumes != null ? [1] : []
+      content {
+        name = each.value.name
+        nfs {
+          server    = each.value.bucket
+          path      = each.value.path
+          read_only = each.value.read_only
+        }
+      }
+    }
+
     dynamic "vpc_access" {
       for_each = var.vpc_connector != null ? [1] : []
       content {

@@ -138,3 +138,24 @@ variable "volume_mounts" {
   description = "Volume mounts"
   default     = null
 }
+
+variable "gcs_volumes" {
+  type = object({
+    name      = string
+    bucket    = string
+    read_only = optional(bool, false)
+  })
+  description = "GCS volume mounts"
+  default     = null
+}
+
+variable "nfs_volumes" {
+  type = object({
+    name      = string
+    server    = string
+    path      = string
+    read_only = optional(bool, false)
+  })
+  description = "values for NFS volume mounts"
+  default     = null
+}
