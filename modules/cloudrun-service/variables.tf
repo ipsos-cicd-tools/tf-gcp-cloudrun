@@ -144,7 +144,7 @@ variable "startup_probe" {
 }
 
 variable "container_port" {
-  type    = number
-  default = 8080
+  type        = number
+  default     = 8080
   description = "Port container uses to listen for incoming requests"
 }
