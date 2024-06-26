@@ -7,6 +7,8 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
 
   labels = var.labels
 
+  launch_stage = "BETA"
+
   template {
     service_account = var.service_account
     timeout         = var.timeout
@@ -14,9 +16,15 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
     containers {
       image = var.image_path
 
+      ports {
+        container_port = var.container_port
+      }
+
       dynamic "resources" {
         for_each = var.resources != null ? [var.resources] : []
         content {
+          startup_cpu_boost = resources.value.startup_cpu_boost != null ? resources.value.startup_cpu_boost : null
+          cpu_idle          = resources.value.cpu_idle != null ? resources.value.cpu_idle : true
           limits = {
             cpu    = resources.value.cpu != null ? resources.value.cpu : null
             memory = resources.value.memory != null ? resources.value.memory : null
@@ -29,6 +37,22 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
         content {
           name       = "cloudsql"
           mount_path = "/cloudsql"
+        }
+      }
+
+      dynamic "volume_mounts" {
+        for_each = var.volume_mounts != null ? var.volume_mounts : {}
+        content {
+          name       = volume_mounts.value.name
+          mount_path = volume_mounts.value.mount_path
+        }
+      }
+
+      dynamic "volume_mounts" {
+        for_each = var.volume_mounts != null ? [var.volume_mounts] : []
+        content {
+          name       = each.value.name
+          mount_path = each.value.mount_path
         }
       }
 
@@ -67,6 +91,19 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
           }
         }
       }
+
+      dynamic "startup_probe" {
+        for_each = var.startup_probe != null ? [var.startup_probe] : []
+        content {
+          failure_threshold     = startup_probe.value.failure_threshold
+          initial_delay_seconds = startup_probe.value.initial_delay_seconds
+          period_seconds        = startup_probe.value.period_seconds
+          timeout_seconds       = startup_probe.value.timeout_seconds
+          tcp_socket {
+            port = startup_probe.value.port
+          }
+        }
+      }
     }
 
     dynamic "volumes" {
@@ -75,6 +112,29 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
         name = "cloudsql"
         cloud_sql_instance {
           instances = [var.db_connection]
+        }
+      }
+    }
+
+    dynamic "volumes" {
+      for_each = var.gcs_volumes != null ? var.gcs_volumes : {}
+      content {
+        name = volumes.value.name
+        gcs {
+          bucket    = volumes.value.bucket
+          read_only = volumes.value.read_only
+        }
+      }
+    }
+
+    dynamic "volumes" {
+      for_each = var.nfs_volumes != null ? var.nfs_volumes : {}
+      content {
+        name = volumes.value.name
+        nfs {
+          server    = volumes.value.bucket
+          path      = volumes.value.path
+          read_only = volumes.value.read_only
         }
       }
     }

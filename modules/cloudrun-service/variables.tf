@@ -130,32 +130,50 @@ variable "resources" {
   default     = null
 }
 
-variable "volume_mounts" {
+variable "startup_probe" {
   type = object({
+    failure_threshold     = optional(number, null)
+    initial_delay_seconds = optional(number, null)
+    period_seconds        = optional(number, null)
+    timeout_seconds       = optional(number, null)
+    http_get_path         = optional(string, null)
+    port                  = optional(number, null)
+  })
+  description = "values for startup probe"
+  default     = null
+}
+
+variable "container_port" {
+  type        = number
+  default     = 8080
+  description = "Port container uses to listen for incoming requests"
+}
+variable "volume_mounts" {
+  type = map(object({
     name       = string
     mount_path = string
-  })
+  }))
   description = "Volume mounts"
   default     = null
 }
 
 variable "gcs_volumes" {
-  type = object({
+  type = map(object({
     name      = string
     bucket    = string
     read_only = optional(bool, false)
-  })
+  }))
   description = "GCS volume mounts"
   default     = null
 }
 
 variable "nfs_volumes" {
-  type = object({
+  type = map(object({
     name      = string
     server    = string
     path      = string
     read_only = optional(bool, false)
-  })
+  }))
   description = "values for NFS volume mounts"
   default     = null
 }

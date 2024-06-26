@@ -7,12 +7,18 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
 
   labels = var.labels
 
+  launch_stage = "BETA"
+
   template {
     service_account = var.service_account
     timeout         = var.timeout
 
     containers {
       image = var.image_path
+
+      ports {
+        container_port = var.container_port
+      }
 
       dynamic "resources" {
         for_each = var.resources != null ? [var.resources] : []
@@ -31,6 +37,14 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
         content {
           name       = "cloudsql"
           mount_path = "/cloudsql"
+        }
+      }
+
+      dynamic "volume_mounts" {
+        for_each = var.volume_mounts != null ? var.volume_mounts : {}
+        content {
+          name       = volume_mounts.value.name
+          mount_path = volume_mounts.value.mount_path
         }
       }
 
@@ -77,6 +91,19 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
           }
         }
       }
+
+      dynamic "startup_probe" {
+        for_each = var.startup_probe != null ? [var.startup_probe] : []
+        content {
+          failure_threshold     = startup_probe.value.failure_threshold
+          initial_delay_seconds = startup_probe.value.initial_delay_seconds
+          period_seconds        = startup_probe.value.period_seconds
+          timeout_seconds       = startup_probe.value.timeout_seconds
+          tcp_socket {
+            port = startup_probe.value.port
+          }
+        }
+      }
     }
 
     dynamic "volumes" {
@@ -90,24 +117,24 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
     }
 
     dynamic "volumes" {
-      for_each = var.gcs_volumes != null ? [1] : []
+      for_each = var.gcs_volumes != null ? var.gcs_volumes : {}
       content {
-        name = each.value.name
+        name = volumes.value.name
         gcs {
-          bucket    = each.value.bucket
-          read_only = each.value.read_only
+          bucket    = volumes.value.bucket
+          read_only = volumes.value.read_only
         }
       }
     }
 
     dynamic "volumes" {
-      for_each = var.nfs_volumes != null ? [1] : []
+      for_each = var.nfs_volumes != null ? var.nfs_volumes : {}
       content {
-        name = each.value.name
+        name = volumes.value.name
         nfs {
-          server    = each.value.bucket
-          path      = each.value.path
-          read_only = each.value.read_only
+          server    = volumes.value.bucket
+          path      = volumes.value.path
+          read_only = volumes.value.read_only
         }
       }
     }
