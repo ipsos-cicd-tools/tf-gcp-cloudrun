@@ -48,14 +48,6 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
         }
       }
 
-      dynamic "volume_mounts" {
-        for_each = var.volume_mounts != null ? [var.volume_mounts] : []
-        content {
-          name       = each.value.name
-          mount_path = each.value.mount_path
-        }
-      }
-
       dynamic "env" {
         for_each = var.env_vars
         content {
