@@ -9,15 +9,16 @@ Module to deploy:
 * hashicorp/google version ~> 5.20.0
 
 ## Useage 
-More specific useage examples can be found in the ***modules*** folder under the corresponding module name
+More specific useage examples can be found in the ***modules/module-name/example*** folder
 
 ```
 module "cloudrun" {
-  source       = "git::https://github.com/ipsos-cicd-tools/tf-gcp-cloudrun//modules/cloudrun-service?ref=1.1.1"
+  source       = "git::https://github.com/ipsos-cicd-tools/tf-gcp-cloudrun//modules/cloudrun-service?ref=1.3.0"
   project_id   = var.project_id
   region       = var.region
   service_name = "test-service"
   timeout      = "120s"
+  ingress      = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
   labels = {
     deployedby = "terraform"
   }
@@ -26,12 +27,13 @@ module "cloudrun" {
   db_connection        = null
   vpc_connector        = null
   cloud_sql_connection = false
+  min_instance_count   = 0
   max_instance_count   = 3
   allow_unauth         = true
   lifecycle_on         = true
   resources = {
-    cpu    = "1"
-    memory = "256Mi"
+    cpu               = "1"
+    memory            = "256Mi"
     startup_cpu_boost = false
   }
   env_vars = [
@@ -53,6 +55,27 @@ module "cloudrun" {
     period_seconds        = 10
     timeout_seconds       = 2
     http_get_path         = "/healthcheck/"
+  }
+
+  startup_probe = {
+    failure_threshold     = 3
+    initial_delay_seconds = 0
+    period_seconds        = 10
+    timeout_seconds       = 2
+    port                  = 8080
+  }
+
+  gcs_volumes = {
+    "bucket1" = {
+      name   = "gcs-volume1"
+      bucket = "bucket-name"  
+    }
+  } 
+  volume_mounts = {
+    "mount1" = {
+      name       = "gcs-volume1"
+      mount_path = "/mnt/mount-name"    
+    }
   }
 }
 ```

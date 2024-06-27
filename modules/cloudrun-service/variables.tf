@@ -148,3 +148,32 @@ variable "container_port" {
   default     = 8080
   description = "Port container uses to listen for incoming requests"
 }
+variable "volume_mounts" {
+  type = map(object({
+    name       = string
+    mount_path = string
+  }))
+  description = "Volume mounts"
+  default     = null
+}
+
+variable "gcs_volumes" {
+  type = map(object({
+    name      = string
+    bucket    = string
+    read_only = optional(bool, false)
+  }))
+  description = "GCS volume mounts"
+  default     = null
+}
+
+variable "nfs_volumes" {
+  type = map(object({
+    name      = string
+    server    = string
+    path      = string
+    read_only = optional(bool, false)
+  }))
+  description = "values for NFS volume mounts"
+  default     = null
+}

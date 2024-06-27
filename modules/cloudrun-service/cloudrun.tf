@@ -7,6 +7,8 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
 
   labels = var.labels
 
+  launch_stage = var.volume_mounts != null ? "BETA" : "GA"
+
   template {
     service_account = var.service_account
     timeout         = var.timeout
@@ -35,6 +37,14 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
         content {
           name       = "cloudsql"
           mount_path = "/cloudsql"
+        }
+      }
+
+      dynamic "volume_mounts" {
+        for_each = var.volume_mounts != null ? var.volume_mounts : {}
+        content {
+          name       = volume_mounts.value.name
+          mount_path = volume_mounts.value.mount_path
         }
       }
 
@@ -94,6 +104,29 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
         name = "cloudsql"
         cloud_sql_instance {
           instances = [var.db_connection]
+        }
+      }
+    }
+
+    dynamic "volumes" {
+      for_each = var.gcs_volumes != null ? var.gcs_volumes : {}
+      content {
+        name = volumes.value.name
+        gcs {
+          bucket    = volumes.value.bucket
+          read_only = volumes.value.read_only
+        }
+      }
+    }
+
+    dynamic "volumes" {
+      for_each = var.nfs_volumes != null ? var.nfs_volumes : {}
+      content {
+        name = volumes.value.name
+        nfs {
+          server    = volumes.value.bucket
+          path      = volumes.value.path
+          read_only = volumes.value.read_only
         }
       }
     }

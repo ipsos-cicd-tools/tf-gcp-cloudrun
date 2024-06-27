@@ -1,5 +1,5 @@
 module "cloudrun" {
-  source       = "git::https://github.com/ipsos-cicd-tools/tf-gcp-cloudrun//modules/cloudrun-service?ref=1.1.1"
+  source       = "git::https://github.com/ipsos-cicd-tools/tf-gcp-cloudrun//modules/cloudrun-service?ref=1.3.0"
   project_id   = var.project_id
   region       = var.region
   service_name = "test-service"
@@ -41,5 +41,26 @@ module "cloudrun" {
     period_seconds        = 10
     timeout_seconds       = 2
     http_get_path         = "/healthcheck/"
+  }
+
+  startup_probe = {
+    failure_threshold     = 3
+    initial_delay_seconds = 0
+    period_seconds        = 10
+    timeout_seconds       = 2
+    port                  = 8080
+  }
+
+  gcs_volumes = {
+    "bucket1" = {
+      name   = "gcs-volume1"
+      bucket = "bucket-name"
+    }
+  }
+  volume_mounts = {
+    "mount1" = {
+      name       = "gcs-volume1"
+      mount_path = "/mnt/mount-name"
+    }
   }
 }
