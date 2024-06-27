@@ -7,7 +7,7 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
 
   labels = var.labels
 
-  launch_stage = "BETA"
+  launch_stage = var.volume_mounts != null ? "BETA" : "GA"
 
   template {
     service_account = var.service_account
