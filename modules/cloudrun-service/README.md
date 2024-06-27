@@ -80,5 +80,5 @@ vpc_egress  = "PRIVATE_RANGES_ONLY"
 
 | Name | Description |
 |------|-------------|
-| <a name="output_service_name"></a> [service\_name](#output\_service\_name) | the name of the cloud run service |
+| <a name="output_service_name"></a> [service\_name](#output\_service\_name) | The name of the cloud run service |
 <!-- END_TF_DOCS -->
