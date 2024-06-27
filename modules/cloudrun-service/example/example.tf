@@ -54,13 +54,13 @@ module "cloudrun" {
   gcs_volumes = {
     "bucket1" = {
       name   = "gcs-volume1"
-      bucket = "bucket-name"  
+      bucket = "bucket-name"
     }
-  } 
+  }
   volume_mounts = {
     "mount1" = {
       name       = "gcs-volume1"
-      mount_path = "/mnt/mount-name"    
+      mount_path = "/mnt/mount-name"
     }
   }
 }
