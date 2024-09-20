@@ -149,6 +149,9 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
     ignore_changes = [
       # Ignore changes to images, e.g. devs changing the image tag.
       template[0].containers[0].image,
+      template[0].containers[0].name,
+      client_version,
+      client
     ]
   }
 }
