@@ -7,7 +7,12 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
 
   labels = var.labels
 
-  launch_stage = "BETA"
+  # Disable IAM invoker check entirely - no IAM check performed on any invocation.
+  # Simpler than allow_unauth (allUsers IAM binding). Takes full precedence.
+  invoker_iam_disabled = var.disable_invoker_iam
+
+  # BETA only needed for custom volume_mounts; direct VPC is now GA.
+  launch_stage = var.volume_mounts != null ? "BETA" : "GA"
 
   template {
     service_account = var.service_account
@@ -124,7 +129,7 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
       content {
         name = volumes.value.name
         nfs {
-          server    = volumes.value.bucket
+          server    = volumes.value.server # bug fix: was volumes.value.bucket
           path      = volumes.value.path
           read_only = volumes.value.read_only
         }
@@ -132,10 +137,21 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
     }
 
     dynamic "vpc_access" {
-      for_each = var.vpc_connector != null ? [1] : []
+      for_each = (var.vpc_connector != null || var.vpc_direct != null) ? [1] : []
       content {
-        connector = var.vpc_connector
-        egress    = var.vpc_egress
+        # Option 1: Legacy VPC connector (mutually exclusive with network_interfaces)
+        connector = var.vpc_connector != null ? var.vpc_connector : null
+        egress    = var.vpc_connector != null ? var.vpc_egress : null
+
+        # Option 2: Direct VPC - lower latency, no connector resource needed (GA)
+        dynamic "network_interfaces" {
+          for_each = var.vpc_direct != null ? [var.vpc_direct] : []
+          content {
+            network    = network_interfaces.value.network
+            subnetwork = network_interfaces.value.subnetwork
+            tags       = network_interfaces.value.tags
+          }
+        }
       }
     }
 
