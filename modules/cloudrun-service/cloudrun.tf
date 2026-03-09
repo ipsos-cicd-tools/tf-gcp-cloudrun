@@ -5,7 +5,7 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
   ingress  = var.ingress
   client   = var.client
 
-    labels = var.labels
+  labels = var.labels
 
   # Disable IAM invoker check entirely - no IAM check performed on any invocation.
   # Simpler than allow_unauth (allUsers IAM binding). Takes full precedence.
@@ -127,7 +127,7 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
     dynamic "volumes" {
       for_each = var.nfs_volumes != null ? var.nfs_volumes : {}
       content {
-                name = volumes.value.name
+        name = volumes.value.name
         nfs {
           server    = volumes.value.server # bug fix: was volumes.value.bucket
           path      = volumes.value.path
