@@ -29,7 +29,7 @@ module "my_service" {
 ```
 
 <!-- BEGIN_TF_DOCS -->
-# Usage
+## Usage
 Basic usage of this module is as follows:
 ```
 module "cloudrun-service" {
@@ -70,7 +70,6 @@ vpc_direct  = null
 vpc_egress  = "PRIVATE_RANGES_ONLY"
 }
 ```
-
 ## Resources
 
 | Name | Type |
