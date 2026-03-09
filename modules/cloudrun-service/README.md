@@ -1,5 +1,35 @@
+### Direct VPC (no connector)
+```
+module "my_service" {
+  source = "./modules/cloudrun-service"
+
+  vpc_direct = {
+    network    = "my-vpc"
+    subnetwork = "my-subnet"
+    tags       = ["cloud-run"]
+    egress     = "PRIVATE_RANGES_ONLY"
+  }
+}
+```
+### Disable IAM entirely (fully public)
+```
+module "my_service" {
+  source = "./modules/cloudrun-service"
+
+  disable_invoker_iam = true  # No IAM check on any request
+}
+```
+### Legacy allUsers IAM binding (old public access approach)
+```
+module "my_service" {
+  source = "./modules/cloudrun-service"
+
+  allow_unauth = true  # Grants allUsers roles/run.invoker via IAM
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
-## Usage
+# Usage
 Basic usage of this module is as follows:
 ```
 module "cloudrun-service" {
@@ -38,6 +68,7 @@ vpc_connector  = null
 vpc_egress  = "PRIVATE_RANGES_ONLY"
 }
 ```
+
 ## Resources
 
 | Name | Type |

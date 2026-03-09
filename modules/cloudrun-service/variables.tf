@@ -58,7 +58,19 @@ variable "timeout" {
 }
 
 variable "vpc_connector" {
-  type    = string
+  description = "Legacy VPC Access connector name. Format: projects/{project}/locations/{location}/connectors/{connector}. Mutually exclusive with vpc_direct."
+  type        = string
+  default     = null
+}
+
+variable "vpc_direct" {
+  description = "Direct VPC egress configuration (no connector required). Mutually exclusive with vpc_connector. At least one of network or subnetwork must be specified."
+  type = object({
+    network    = optional(string, null)
+    subnetwork = optional(string, null)
+    tags       = optional(list(string), [])
+    egress     = optional(string, "PRIVATE_RANGES_ONLY")
+  })
   default = null
 }
 
@@ -90,9 +102,9 @@ variable "cloud_sql_connection" {
 }
 
 variable "vpc_egress" {
-  description = "The egress setting for the VPC access. Options are PRIVATE_RANGES_ONLY or ALL_TRAFFIC."
+  description = "Egress setting for legacy VPC connector. Options: PRIVATE_RANGES_ONLY or ALL_TRAFFIC. Only used when vpc_connector is set."
   type        = string
-  default     = "PRIVATE_RANGES_ONLY" # Set a sensible default or make it mandatory by not setting a default.
+  default     = "PRIVATE_RANGES_ONLY"
 }
 
 variable "liveness_probe" {
@@ -108,7 +120,13 @@ variable "liveness_probe" {
 }
 
 variable "allow_unauth" {
-  description = "Allow unauthenticated invocations."
+  description = "Allow unauthenticated invocations via IAM allUsers binding. Cannot be used together with disable_invoker_iam."
+  type        = bool
+  default     = false
+}
+
+variable "disable_invoker_iam" {
+  description = "Disable IAM invoker check entirely on the service. No IAM check is performed on any invocation. Simpler than allow_unauth and takes full precedence over IAM policies."
   type        = bool
   default     = false
 }

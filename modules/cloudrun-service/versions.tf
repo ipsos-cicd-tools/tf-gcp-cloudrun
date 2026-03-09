@@ -4,7 +4,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 5.20.0"
+      version = ">= 6.0.0" # 6.0+ required for invoker_iam_disabled and v2 IAM resources
     }
   }
 }
