@@ -62,6 +62,7 @@ min_instance_count  = 0
 nfs_volumes  = null
 resources  = null
 service_account  = null
+session_affinity  = null
 startup_probe  = null
 timeout  = "60s"
 volume_mounts  = null
@@ -103,6 +104,7 @@ vpc_egress  = "PRIVATE_RANGES_ONLY"
 | <a name="input_resources"></a> [resources](#input\_resources) | Resource limits | <pre>object({<br>    cpu               = optional(string, null)<br>    memory            = optional(string, null)<br>    cpu_idle          = optional(bool, null)<br>    startup_cpu_boost = optional(bool, null)<br>  })</pre> | `null` | no |
 | <a name="input_service_account"></a> [service\_account](#input\_service\_account) | n/a | `string` | `null` | no |
 | <a name="input_service_name"></a> [service\_name](#input\_service\_name) | n/a | `string` | n/a | yes |
+| <a name="input_session_affinity"></a> [session\_affinity](#input\_session\_affinity) | Enable session affinity | `bool` | `null` | no |
 | <a name="input_startup_probe"></a> [startup\_probe](#input\_startup\_probe) | values for startup probe | <pre>object({<br>    failure_threshold     = optional(number, null)<br>    initial_delay_seconds = optional(number, null)<br>    period_seconds        = optional(number, null)<br>    timeout_seconds       = optional(number, null)<br>    http_get_path         = optional(string, null)<br>    port                  = optional(number, null)<br>  })</pre> | `null` | no |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | n/a | `string` | `"60s"` | no |
 | <a name="input_volume_mounts"></a> [volume\_mounts](#input\_volume\_mounts) | Volume mounts | <pre>map(object({<br>    name       = string<br>    mount_path = string<br>  }))</pre> | `null` | no |
