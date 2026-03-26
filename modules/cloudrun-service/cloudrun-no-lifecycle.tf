@@ -17,7 +17,7 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
   template {
     service_account  = var.service_account
     timeout          = var.timeout
-    session_affinity = var.session_affinity 
+    session_affinity = var.session_affinity
 
     containers {
       image = var.image_path
