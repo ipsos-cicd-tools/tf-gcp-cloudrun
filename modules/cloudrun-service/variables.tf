@@ -195,3 +195,9 @@ variable "nfs_volumes" {
   description = "values for NFS volume mounts"
   default     = null
 }
+
+variable "session_affinity" {
+  description = "Enable session affinity"
+  type        = bool
+  default     = null
+}
