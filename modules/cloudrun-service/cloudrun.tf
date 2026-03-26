@@ -15,8 +15,9 @@ resource "google_cloud_run_v2_service" "default_with_lc" {
   launch_stage = var.volume_mounts != null ? "BETA" : "GA"
 
   template {
-    service_account = var.service_account
-    timeout         = var.timeout
+    service_account  = var.service_account
+    timeout          = var.timeout
+    session_affinity = var.session_affinity 
 
     containers {
       image = var.image_path
