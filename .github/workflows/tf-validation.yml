@@ -39,9 +39,7 @@ jobs:
 
       # Run Terraform Validator
       - name: Terraform Validation
-        run: |
-          cd modules/cloudrun-service
-          ../../.github/src/terraform-validator.sh
+        run: .github/src/terraform-validator.sh
 
   # Updates tf-doc section of readme
   docs:
