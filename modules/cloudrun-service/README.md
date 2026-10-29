@@ -45,10 +45,12 @@ allow_unauth  = false
 client  = "cloud-console"
 cloud_sql_connection  = false
 container_port  = 8080
+custom_audiences  = []
 db_connection  = null
 disable_invoker_iam  = false
 env_secret_vars  = []
 env_vars  = []
+execution_environment  = "EXECUTION_ENVIRONMENT_GEN2"
 gcs_volumes  = null
 image_path  = "us-docker.pkg.dev/cloudrun/container/hello"
 ingress  = "INGRESS_TRAFFIC_ALL"
@@ -86,10 +88,12 @@ vpc_egress  = "PRIVATE_RANGES_ONLY"
 | <a name="input_client"></a> [client](#input\_client) | n/a | `string` | `"cloud-console"` | no |
 | <a name="input_cloud_sql_connection"></a> [cloud\_sql\_connection](#input\_cloud\_sql\_connection) | Create a Cloud SQL connection. | `bool` | `false` | no |
 | <a name="input_container_port"></a> [container\_port](#input\_container\_port) | Port container uses to listen for incoming requests | `number` | `8080` | no |
+| <a name="input_custom_audiences"></a> [custom\_audiences](#input\_custom\_audiences) | Custom audiences for the Cloud Run service. This is used for authentication and authorization purposes. | `list(string)` | `[]` | no |
 | <a name="input_db_connection"></a> [db\_connection](#input\_db\_connection) | Required if 'var.cloud\_sql\_connection' is 'true' | `string` | `null` | no |
 | <a name="input_disable_invoker_iam"></a> [disable\_invoker\_iam](#input\_disable\_invoker\_iam) | Disable IAM invoker check entirely on the service. No IAM check is performed on any invocation. Simpler than allow\_unauth and takes full precedence over IAM policies. | `bool` | `false` | no |
 | <a name="input_env_secret_vars"></a> [env\_secret\_vars](#input\_env\_secret\_vars) | Environment variables (Secret Manager) | <pre>list(object({<br>    name    = string<br>    secret  = string<br>    version = string<br>  }))</pre> | `[]` | no |
 | <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Environment variables (cleartext) | <pre>list(object({<br>    value = string<br>    name  = string<br>  }))</pre> | `[]` | no |
+| <a name="input_execution_environment"></a> [execution\_environment](#input\_execution\_environment) | Execution environment for the Cloud Run service. Possible values are: EXECUTION\_ENVIRONMENT\_GEN1, EXECUTION\_ENVIRONMENT\_GEN2 | `string` | `"EXECUTION_ENVIRONMENT_GEN2"` | no |
 | <a name="input_gcs_volumes"></a> [gcs\_volumes](#input\_gcs\_volumes) | GCS volume mounts | <pre>map(object({<br>    name      = string<br>    bucket    = string<br>    read_only = optional(bool, false)<br>  }))</pre> | `null` | no |
 | <a name="input_image_path"></a> [image\_path](#input\_image\_path) | n/a | `string` | `"us-docker.pkg.dev/cloudrun/container/hello"` | no |
 | <a name="input_ingress"></a> [ingress](#input\_ingress) | Possible values are: INGRESS\_TRAFFIC\_ALL, INGRESS\_TRAFFIC\_INTERNAL\_ONLY, INGRESS\_TRAFFIC\_INTERNAL\_LOAD\_BALANCER | `string` | `"INGRESS_TRAFFIC_ALL"` | no |

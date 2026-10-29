@@ -201,3 +201,15 @@ variable "session_affinity" {
   type        = bool
   default     = null
 }
+
+variable "execution_environment" {
+  description = "Execution environment for the Cloud Run service. Possible values are: EXECUTION_ENVIRONMENT_GEN1, EXECUTION_ENVIRONMENT_GEN2"
+  type        = string
+  default     = "EXECUTION_ENVIRONMENT_GEN2"
+}
+
+variable "custom_audiences" {
+  description = "Custom audiences for the Cloud Run service. This is used for authentication and authorization purposes."
+  type        = list(string)
+  default     = []
+}

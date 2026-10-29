@@ -7,6 +7,8 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
 
   labels = var.labels
 
+  custom_audiences = var.custom_audiences
+
   # Disable IAM invoker check entirely - no IAM check performed on any invocation.
   # Simpler than allow_unauth (allUsers IAM binding). Takes full precedence.
   invoker_iam_disabled = var.disable_invoker_iam
@@ -15,9 +17,10 @@ resource "google_cloud_run_v2_service" "default_no_lc" {
   launch_stage = var.volume_mounts != null ? "BETA" : "GA"
 
   template {
-    service_account  = var.service_account
-    timeout          = var.timeout
-    session_affinity = var.session_affinity
+    service_account       = var.service_account
+    timeout               = var.timeout
+    session_affinity      = var.session_affinity
+    execution_environment = var.execution_environment != null ? var.execution_environment : "EXECUTION_ENVIRONMENT_GEN2"
 
     containers {
       image = var.image_path
